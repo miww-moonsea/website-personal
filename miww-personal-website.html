@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miww Moonsea - Digital Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+<style type="text/css" id="dcoder_stylesheet">/* CSS Reset & Pengaturan Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Latar belakang gradien gelap yang kompleks */
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    color: #e0e0e0;
+    display: flex; /* Menggunakan flexbox untuk layout sidebar */
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Mencegah body utama scroll */
+}
+
+/* --- Definisi Animasi --- */
+@keyframes slideInFromLeft {
+    from { 
+        transform: translateX(-100%); 
+        opacity: 0;
+    }
+    to { 
+        transform: translateX(0); 
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Sidebar Navigasi (Menu Samping) --- */
+.sidebar {
+    flex-basis: 280px; /* Lebar sidebar */
+    flex-shrink: 0;
+    height: 100vh; /* Sidebar setinggi layar */
+    position: fixed; /* Membuat sidebar tetap di tempat */
+    top: 0;
+    left: 0;
+    /* Efek Glassmorphism (Kaca Buram) */
+    background: rgba(25, 29, 39, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); /* Untuk Safari */
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    /* Animasi sidebar muncul */
+    animation: slideInFromLeft 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+.sidebar-header h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
+}
+.sidebar-header p {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* Tombol Navigasi */
+.nav-menu {
+    width: 100%;
+    list-style: none;
+}
+.nav-menu li {
+    margin-bottom: 10px;
+}
+.nav-button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #aaa;
+    background: transparent;
+    border: none;
+    padding: 15px 20px;
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    position: relative; /* Untuk pseudo-element */
+}
+
+.nav-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.nav-button.active {
+    background: rgba(0, 170, 255, 0.2);
+    color: #fff;
+    font-weight: 600;
+    /* Efek garis aktif yang elegan */
+    box-shadow: inset 3px 0 0 #00aaff;
+}
+
+/* --- Kontainer Konten Utama --- */
+.content-wrapper {
+    flex-grow: 1; /* Mengisi sisa ruang */
+    height: 100vh; /* Set tinggi agar bisa di-scroll */
+    overflow-y: auto; /* Izinkan scroll HANYA di area konten */
+    position: relative;
+    /* Beri margin kiri seukuran sidebar */
+    margin-left: 280px;
+}
+
+/* Pengaturan Slide */
+.slide {
+    padding: 50px;
+    width: 100%;
+    /* Sembunyikan semua slide secara default */
+    display: none; 
+    opacity: 0;
+    /* Ini akan dianimasikan oleh .active */
+}
+
+.slide.active {
+    display: block; /* Tampilkan hanya yang aktif */
+    opacity: 1;
+    /* Terapkan animasi saat slide menjadi aktif */
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* --- Style untuk Slide 1 (Profil) --- */
+.profile-header {
+    margin-bottom: 30px;
+    /* Item pertama yang dianimasikan */
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.2s forwards;
+}
+.profile-header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    /* Efek Teks Gradien */
+    background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 5px;
+}
+.profile-header p {
+    font-size: 1.2rem;
+    color: #aaa;
+}
+
+/* Grid Layout untuk Konten Profil */
+.profile-grid {
+    display: grid;
+    /* Ini adalah bagian "rumit": grid responsif */
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 25px;
+}
+
+/* Kartu Info dengan efek Glassmorphism */
+.info-card {
+    background: rgba(30, 32, 41, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    /* Animasi hover yang elegan */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* Animasi Staggered (muncul satu per satu) */
+    opacity: 0; /* Mulai dari transparan */
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.info-card:hover {
+    transform: translateY(-8px); /* Efek 'terangkat' */
+    box-shadow: 0 10px 30px rgba(0, 170, 255, 0.2); /* Efek glow */
+}
+
+/* Jeda animasi untuk setiap kartu di Slide 1 */
+.slide.active .info-card:nth-child(1) { animation-delay: 0.3s; }
+.slide.active .info-card:nth-child(2) { animation-delay: 0.4s; }
+.slide.active .info-card:nth-child(3) { animation-delay: 0.5s; }
+.slide.active .info-card:nth-child(4) { animation-delay: 0.6s; }
+
+
+.info-card h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #00aaff;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.info-card ul {
+    list-style: none;
+}
+.info-card li {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 25px;
+}
+/* Bullet point kustom yang 'rumit' */
+.info-card li::before {
+    content: '›'; 
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #00aaff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* --- Style untuk Slide 2 (Konsep) --- */
+.concept-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding-bottom: 50px; /* Jarak scroll di bawah */
+}
+
+.concept-card {
+    background: rgba(30, 32, 41, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* Animasi Staggered */
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Jeda animasi untuk setiap kartu di Slide 2 */
+.slide.active .concept-card:nth-child(1) { animation-delay: 0.2s; }
+.slide.active .concept-card:nth-child(2) { animation-delay: 0.4s; }
+.slide.active .concept-card:nth-child(3) { animation-delay: 0.6s; }
+.slide.active .concept-card:nth-child(4) { animation-delay: 0.8s; }
+
+
+.concept-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 170, 255, 0.1);
+}
+
+.concept-card h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 5px;
+}
+.concept-card .subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #aaa;
+    margin-bottom: 25px;
+    font-style: italic;
+}
+.concept-card h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #00aaff;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+.concept-card p, .concept-card li {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #ccc;
+}
+.concept-card ul {
+    padding-left: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.concept-card li {
+    margin-bottom: 8px;
+}
+.concept-card blockquote {
+    border-left: 4px solid #00aaff;
+    padding: 15px 20px;
+    margin-top: 20px;
+    background: rgba(0, 170, 255, 0.05);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+}
+.concept-card blockquote p {
+    margin-bottom: 10px;
+}
+.concept-card blockquote p:last-child {
+    margin-bottom: 0;
+}
+.concept-card blockquote ul {
+    margin-top: 10px;
+    font-style: normal;
+}
+
+/* --- Pengaturan Responsif untuk HP --- */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column; /* Ubah jadi layout kolom */
+        height: auto;
+        overflow: auto; /* Izinkan scroll normal di HP */
+    }
+    .sidebar {
+        flex-basis: auto; /* Lebar otomatis */
+        width: 100%;
+        height: auto;
+        position: relative; /* Hapus 'fixed' */
+        animation: none; /* Matikan animasi slide-in di HP */
+        padding: 15px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .sidebar-header {
+        margin-bottom: 15px;
+        margin-top: 5px;
+    }
+    .nav-menu {
+        display: flex;
+        justify-content: space-around; /* Sebar tombol navigasi */
+        width: 100%;
+    }
+    .nav-menu li {
+        flex-grow: 1;
+    }
+    .nav-button {
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+        box-shadow: none !important;
+    }
+    .nav-button.active {
+        background: rgba(0, 170, 255, 0.2);
+        border-bottom: 3px solid #00aaff; /* Ganti penanda aktif */
+        border-right: none;
+    }
+
+    .content-wrapper {
+        height: auto;
+        overflow-y: visible;
+        margin-left: 0; /* Hapus margin kiri di HP */
+    }
+    .slide {
+        padding: 30px 20px;
+    }
+    .profile-header h1 {
+        font-size: 2.5rem;
+    }
+    .profile-grid {
+        grid-template-columns: 1fr; /* 1 kolom penuh di HP */
+    }
+    .concept-card h2 {
+        font-size: 1.8rem;
+    }
+}
+</style></head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Miww Moonsea</h2>
+            <p>Digital Profile</p>
+        </div>
+        
+        <ul class="nav-menu">
+            <li>
+                <button class="nav-button active" data-slide="slide1">
+                    Profile
+                </button>
+            </li>
+            <li>
+                <button class="nav-button" data-slide="slide2">
+                    Material
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="content-wrapper">
+
+        <section class="slide active" id="slide1">
+            
+            <div class="profile-header">
+                <h1>Miww Moonsea</h1>
+                <p>19 Years Old</p>
+            </div>
+
+            <div class="profile-grid">
+                
+                <div class="info-card">
+                    <h2>Education</h2>
+                    <ul>
+                        <li>STAI Al-Marhalah Al-'Ulya Prodi Perbankan Syariah</li>
+                        <li>University Binus Bekasi Prodi Teknik Informatika</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h2>Soft Skill</h2>
+                    <ul>
+                        <li>Software Engineering</li>
+                        <li>Data analysis</li>
+                        <li>Administration</li>
+                        <li>Crypto analysis</li>
+                        <li>Businessman</li>
+                        <li>Marketplace Analysis</li>
+                        <li>International based stocks</li>
+                        <li>Photo, video and poster design editor</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h2>Experience</h2>
+                    <ul>
+                        <li>Koko Will Restaurant : 2018</li>
+                        <li>Digital marketing sales : 2019</li>
+                        <li>Beverage shop owner : 2020 - Now</li>
+                        <li>Google online administration : 2022</li>
+                        <li>UPTD Puskesmas Apprenticeship : 2023</li>
+                        <li>CEO of ICHC Kalimalang: 2024</li>
+                        <li>Qaila Ice shop owner : 2024 - Now</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h2>Performance</h2>
+                    <ul>
+                        <li>1st place winner of Bekasi city level adhan competition</li>
+                        <li>2nd Place in Muaythai (National Championship) PB MI</li>
+                        <li>1st Place in Philosophy at Bekasi City Level</li>
+                        <li>1st Place in Informatics in creating an application at West Java level</li>
+                        <li>3rd Place in the 10 Juz Al-Qur'an Memorization Competition at Bekasi Level</li>
+                        <li>2nd place in regional cooking competition</li>
+                        <li>2nd Place in Taekwondo Championship 2023 Piala Kemenpora, Bekasi city level</li>
+                        <li>1st Place in Philosophy at the city level throughout Java Island</li>
+                        <li>2nd Place in the 80 Kilometer Marathon</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="slide" id="slide2">
+            
+            <div class="concept-wrapper">
+
+                <div class="concept-card">
+                    <h2>Berfikir Kritis</h2>
+                    <p class="subtitle">Menilai, menganalisis, dan mengevaluasi Informasi secara logis.</p>
+                    
+                    <h3>Apa itu?</h3>
+                    <p>Sederhananya, berpikir kritis adalah cara berpikir yang "tidak langsung percaya". Anda tidak menelan informasi bulat-bulat.</p>
+
+                    <h3>Prosesnya:</h3>
+                    <ul>
+                        <li><strong>Menilai:</strong> Anda melihat sebuah informasi dan bertanya, "Apakah ini benar? Siapa yang bilang? Apa buktinya?"</li>
+                        <li><strong>Menganalisis:</strong> Anda membedah informasi itu menjadi bagian-bagian kecil untuk melihat apa saja isinya.</li>
+                        <li><strong>Mengevaluasi:</strong> Anda menimbang-nimbang kuat lemahnya, atau masuk akal tidaknya informasi tersebut.</li>
+                        <li><strong>Logis:</strong> Semua proses tadi dilakukan menggunakan akal sehat dan logika, bukan perasaan atau asumsi.</li>
+                    </ul>
+                    
+                    <h3>Contoh:</h3>
+                    <blockquote>Saat Anda mendapat pesan berantai di WhatsApp tentang obat ajaib, Anda tidak langsung menyebarkannya. Anda berpikir kritis: "Apa ini ada bukti ilmiahnya? Apakah sumbernya terpercaya?"</blockquote>
+                </div>
+                
+                <div class="concept-card">
+                    <h2>Berpikir Kreatif</h2>
+                    <p class="subtitle">Menghasilkan ide baru, imajinatif, dan inovatif.</p>
+                    
+                    <h3>Apa itu?</h3>
+                    <p>Ini adalah kemampuan untuk menciptakan ide-ide baru atau "berpikir di luar kotak" (thinking outside the box).</p>
+                    
+                    <h3>Prosesnya:</h3>
+                    <ul>
+                        <li><strong>Menghasilkan Ide Baru:</strong> Anda memunculkan gagasan yang belum pernah terpikirkan sebelumnya.</li>
+                        <li><strong>Imajinatif:</strong> Anda menggunakan daya imasi Anda untuk membayangkan berbagai kemungkinan.</li>
+                        <li><strong>Inovatif:</strong> Ide Anda tidak only baru, tapi juga bisa memberikan solusi atau cara pandang yang lebih baik.</li>
+                    </ul>
+
+                    <h3>Contoh:</h3>
+                    <blockquote>Masalahnya adalah "banyak sampah plastik". Pikiran kreatif akan mencari solusi baru: "Bagaimana kalau plastiknya kita ubah jadi bahan bakar? Atau kita buat jadi tas kerajinan yang bisa dijual?"</blockquote>
+                </div>
+                
+                <div class="concept-card">
+                    <h2>Berpikir Analitis</h2>
+                    <p class="subtitle">Memecah persoalan besar menjadi bagian-bagian kecil untuk dipahami lebih mendalam.</p>
+                    
+                    <h3>Apa itu?</h3>
+                    <p>Bayangkan Anda diberi sebuah mesin yang rusak. Alih-alih hanya melihatnya sebagai "mesin rusak", Anda membongkarnya satu per satu—melihat bautnya, kabelnya, mesinnya—untuk mencari tahu tepatnya di bagian mana letak kerusakannya.</p>
+                    
+                    <h3>Prosesnya:</h3>
+                    <ul>
+                        <li><strong>Memecah:</strong> Anda mengambil satu masalah besar (misalnya: "Penjualan produk menurun") dan membaginya menjadi pertanyaan-pertanyaan kecil.</li>
+                        <li><strong>Mendalami:</strong> Dengan melihat bagian-bagian kecil ini, Anda bisa menemukan akar masalahnya.</li>
+                    </ul>
+
+                    <h3>Contoh Sederhana:</h3>
+                    <blockquote>
+                        <p><strong>Masalah Besar:</strong> "Kamar saya berantakan."</p>
+                        <p><strong>Berpikir Analitis (Memecah):</strong></p>
+                        <ul>
+                            <li>Apa yang bikin berantakan? (Baju kotor, buku, sampah).</li>
+                            <li>Di mana letak baju kotor? (Di lantai dan di kursi).</li>
+                            <li>Di mana letak buku? (Di meja belajar dan kasur).</li>
+                        </ul>
+                        <p><strong>Hasil:</strong> Anda jadi tahu apa saja yang harus dikerjakan untuk menyelesaikan masalah "kamar berantakan".</p>
+                    </blockquote>
+                </div>
+                
+                <div class="concept-card">
+                    <h2>Berpikir Logis</h2>
+                    <p class="subtitle">Menggunakan aturan sebab-akibat dan penalaran rasional.</p>
+                    
+                    <h3>Apa itu?</h3>
+                    <p>Ini adalah cara berpikir yang sangat teratur, runut, dan "masuk akal". Ini semua tentang urutan dan sebab-akibat. Seperti menyusun puzzle, setiap kepingan harus pas di tempatnya.</p>
+                    
+                    <h3>Prosesnya:</h3>
+                    <ul>
+                        <li><strong>Aturan Sebab-Akibat:</strong> Anda memahami bahwa setiap tindakan (sebab) pasti menimbulkan hasil (akibat). "Jika saya tidak belajar (sebab), maka nilai saya akan jelek (akibat)."</li>
+                        <li><strong>Penalaran Rasional:</strong> Anda menggunakan fakta dan akal sehat, bukan perasaan atau emosi.</li>
+                    </ul>
+
+                    <h3>Contoh Sederhana:</h3>
+                    <blockquote>
+                        <p>
+                            <strong>Fakta 1:</strong> Hari ini hujan deras.<br>
+                            <strong>Fakta 2:</strong> Jalanan di depan rumah saya selalu banjir kalau hujan deras.
+                        </p>
+                        <p>
+                            <strong>Kesimpulan Logis:</strong> Maka, jalanan di depan rumah saya hari ini pasti banjir.<br>
+                            <em>Contoh Tidak Logis: "Hari ini hujan, pasti karena tadi pagi saya lupa sarapan."</em>
+                        </p>
+                    </blockquote>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+
+<script type="text/javascript" id="dcoder_script">// Menunggu sampai seluruh halaman (HTML) selesai dimuat
+document.addEventListener('DOMContentLoaded', function() {
+            
+    // Memilih semua elemen yang kita perlukan
+    const navButtons = document.querySelectorAll('.nav-button');
+    const slides = document.querySelectorAll('.slide');
+    const contentWrapper = document.querySelector('.content-wrapper');
+
+    // Fungsi untuk menangani klik navigasi
+    function switchSlide(event) {
+        
+        // Dapatkan ID slide target dari atribut 'data-slide' tombol yang diklik
+        const targetSlideId = event.currentTarget.getAttribute('data-slide');
+
+        // 1. Atur tombol navigasi
+        // Hapus kelas 'active' dari SEMUA tombol
+        navButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+        // Tambahkan kelas 'active' HANYA ke tombol yang diklik
+        event.currentTarget.classList.add('active');
+
+        // 2. Atur slide
+        // Hapus kelas 'active' dari SEMUA slide (menyembunyikan mereka)
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+        
+        // Temukan slide yang dituju berdasarkan ID dan tambahkan kelas 'active'
+        const targetSlide = document.getElementById(targetSlideId);
+        if (targetSlide) {
+            targetSlide.classList.add('active');
+        }
+        
+        // 3. Saat pindah slide, scroll area konten kembali ke atas
+        contentWrapper.scrollTo(0, 0);
+    }
+
+    // Tambahkan event listener (pendengar klik) ke setiap tombol navigasi
+    navButtons.forEach(button => {
+        button.addEventListener('click', switchSlide);
+    });
+
+});
+</script></body></html>
